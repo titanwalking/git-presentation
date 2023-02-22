@@ -1,9 +1,7 @@
 package com.adesso.movee.scene.tvshowdetail
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.adesso.movee.base.BaseAndroidViewModel
 import com.adesso.movee.domain.FetchTvShowCreditsUseCase
 import com.adesso.movee.domain.FetchTvShowDetailUseCase
@@ -12,6 +10,11 @@ import com.adesso.movee.uimodel.TvShowCreditUiModel
 import com.adesso.movee.uimodel.TvShowDetailUiModel
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,13 +24,11 @@ class TvShowDetailViewModel @Inject constructor(
     application: Application
 ) : BaseAndroidViewModel(application) {
 
-    private val _tvShowDetails = MutableLiveData<TvShowDetailUiModel>()
-    val tvShowDetails: LiveData<TvShowDetailUiModel> get() = _tvShowDetails
-    private val _tvShowCredits = MutableLiveData<TvShowCreditUiModel>()
-    val tvShowCasts: LiveData<List<TvShowCastUiModel>> =
-        Transformations.map(_tvShowCredits) { tvShowCredits ->
-            tvShowCredits.cast
-        }
+    private val _tvShowDetails = MutableStateFlow<TvShowDetailUiModel?>(null)
+    val tvShowDetails: StateFlow<TvShowDetailUiModel?> get() = _tvShowDetails
+    private val _tvShowCredits = MutableStateFlow<TvShowCreditUiModel?>(null)
+    val tvShowCasts: StateFlow<List<TvShowCastUiModel>?> =
+        _tvShowCredits.map { it?.cast }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     fun fetchTvShowDetail(id: Long) {
         if (_tvShowDetails.value == null) {

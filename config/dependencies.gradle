@@ -79,7 +79,6 @@ ext {
                     "androidx.room:room-runtime:$version.room",
                     "androidx.room:room-ktx:$version.room",
                     "androidx.lifecycle:lifecycle-viewmodel-ktx:$version.lifecycle",
-                    "androidx.lifecycle:lifecycle-livedata-ktx:$version.lifecycle",
                     "androidx.lifecycle:lifecycle-common-java8:$version.lifecycle",
             ],
 
