@@ -47,7 +47,7 @@ If you want to know more about naming convention, code style and more please loo
 - MVVM Pattern
 
 **View:** Renders UI and delegates user actions to ViewModel
-
+Alican
 **ViewModel:** Can have simple UI logic but most of the time just gets the data from UseCase
 
 **UseCase:** Contains all business rules and they written in the manner of single responsibility principle
